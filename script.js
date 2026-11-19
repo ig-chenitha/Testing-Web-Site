@@ -22,16 +22,30 @@ document.querySelectorAll('.reveal').forEach((element, index) => {
   observer.observe(element);
 });
 
-// Reveal the 3D carousel when it enters the viewport.
-const carousel = document.querySelector('.circular-carousel');
-if (carousel && 'IntersectionObserver' in window) {
-  const carouselObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        carousel.classList.add('is-visible');
-        carouselObserver.disconnect();
-      }
+// Interactive liquid-style FlexCarousel
+const flexCards = Array.from(document.querySelectorAll('.flex-card'));
+if (flexCards.length) {
+  let activeIndex = Math.max(0, flexCards.findIndex(card => card.classList.contains('is-active')));
+  let autoRotate;
+  const setActiveCard = (index) => {
+    activeIndex = (index + flexCards.length) % flexCards.length;
+    flexCards.forEach((card, cardIndex) => {
+      const active = cardIndex === activeIndex;
+      card.classList.toggle('is-active', active);
+      card.setAttribute('aria-pressed', String(active));
     });
-  }, { threshold: 0.15 });
-  carouselObserver.observe(carousel);
+  };
+  const stopAutoRotate = () => window.clearInterval(autoRotate);
+  const startAutoRotate = () => {
+    stopAutoRotate();
+    autoRotate = window.setInterval(() => setActiveCard(activeIndex + 1), 3200);
+  };
+  flexCards.forEach((card, index) => {
+    card.addEventListener('click', () => { setActiveCard(index); startAutoRotate(); });
+    card.addEventListener('mouseenter', stopAutoRotate);
+    card.addEventListener('mouseleave', startAutoRotate);
+    card.addEventListener('focus', stopAutoRotate);
+    card.addEventListener('blur', startAutoRotate);
+  });
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) startAutoRotate();
 }
