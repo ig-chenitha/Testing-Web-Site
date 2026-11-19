@@ -38,3 +38,20 @@
 @media(hover:hover) and (pointer:fine){.flex-card:hover{transform:translateY(-3px) rotateY(var(--tilt-x)) rotateX(var(--tilt-y));}}
 @media(max-width:800px){.flex-carousel{overflow:hidden}.flex-card.is-active{transform:translateY(0) scale(1)}}
 @media(prefers-reduced-motion:reduce){.flex-card,.flex-card::before,.flex-card img{filter:none!important;transform:none!important;box-shadow:none!important}}
+
+
+/* TrueFocus-style animated focus for the main hero heading */
+.true-focus-heading{overflow:visible}
+.true-focus-wrap{position:relative;display:inline-block;padding:9px 12px 13px;margin:-9px -12px -13px;max-width:100%}
+.true-focus-line{display:block;white-space:nowrap}
+.true-focus-line .focus-word{display:inline-block;will-change:filter,opacity,transform;transition:filter .5s cubic-bezier(.65,0,.35,1),opacity .5s ease,transform .5s cubic-bezier(.65,0,.35,1)}
+.true-focus-line .focus-word.is-focused{filter:blur(0)!important;opacity:1!important;transform:scale(1.025)}
+.true-focus-line .focus-word.is-unfocused{filter:blur(2px);opacity:.88}
+.true-focus-frame{position:absolute;inset:0;pointer-events:none;z-index:3}
+.focus-corner{position:absolute;width:18px;height:18px;border-color:var(--orange);border-style:solid;filter:drop-shadow(0 0 5px rgba(255,99,59,.32));transition:all .45s cubic-bezier(.65,0,.35,1)}
+.focus-corner.top-left{top:var(--focus-y,0px);left:var(--focus-x,0px);border-width:2px 0 0 2px}
+.focus-corner.top-right{top:var(--focus-y,0px);left:var(--focus-right,0px);border-width:2px 2px 0 0}
+.focus-corner.bottom-left{top:var(--focus-bottom,0px);left:var(--focus-x,0px);border-width:0 0 2px 2px}
+.focus-corner.bottom-right{top:var(--focus-bottom,0px);left:var(--focus-right,0px);border-width:0 2px 2px 0}
+@media(max-width:460px){.true-focus-wrap{padding:7px 9px 10px;margin:-7px -9px -10px}.focus-corner{width:13px;height:13px}}
+@media(prefers-reduced-motion:reduce){.true-focus-line .focus-word,.focus-corner{transition:none!important}.true-focus-line .focus-word.is-unfocused{filter:none;opacity:1}}
