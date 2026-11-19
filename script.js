@@ -121,3 +121,49 @@ if (flexCards.length && flexCarousel) {
   document.addEventListener('visibilitychange', () => document.hidden ? stopAutoRotate() : startAutoRotate());
   if (!reducedMotion) startAutoRotate();
 }
+
+
+// TrueFocus heading animation — lightweight vanilla JS, no React dependency.
+(() => {
+  const wrap = document.querySelector('.true-focus-wrap');
+  if (!wrap) return;
+  const words = Array.from(wrap.querySelectorAll('.focus-word'));
+  const corners = Array.from(wrap.querySelectorAll('.focus-corner'));
+  if (!words.length || !corners.length) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let current = 0;
+  let interval = null;
+
+  const focusWord = (index) => {
+    current = (index + words.length) % words.length;
+    words.forEach((word, i) => {
+      word.classList.toggle('is-focused', i === current);
+      word.classList.toggle('is-unfocused', i !== current);
+    });
+    const word = words[current];
+    const x = word.offsetLeft - 7;
+    const y = word.offsetTop - 5;
+    const right = word.offsetLeft + word.offsetWidth - 11;
+    const bottom = word.offsetTop + word.offsetHeight;
+    wrap.style.setProperty('--focus-x', x + 'px');
+    wrap.style.setProperty('--focus-y', y + 'px');
+    wrap.style.setProperty('--focus-right', right + 'px');
+    wrap.style.setProperty('--focus-bottom', bottom + 'px');
+  };
+
+  const start = () => {
+    if (reducedMotion || interval) return;
+    interval = window.setInterval(() => focusWord(current + 1), 1550);
+  };
+  const stop = () => {
+    if (interval) window.clearInterval(interval);
+    interval = null;
+  };
+
+  focusWord(0);
+  if (!reducedMotion) start();
+  wrap.addEventListener('mouseenter', stop);
+  wrap.addEventListener('mouseleave', start);
+  window.addEventListener('resize', () => focusWord(current));
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+})();
