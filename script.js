@@ -21,3 +21,17 @@ document.querySelectorAll('.reveal').forEach((element, index) => {
   element.style.transitionDelay = (index % 4) * 75 + 'ms';
   observer.observe(element);
 });
+
+// Reveal the 3D carousel when it enters the viewport.
+const carousel = document.querySelector('.circular-carousel');
+if (carousel && 'IntersectionObserver' in window) {
+  const carouselObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        carousel.classList.add('is-visible');
+        carouselObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.15 });
+  carouselObserver.observe(carousel);
+}
