@@ -21,3 +21,20 @@
 @media(max-width:800px){.carousel-showcase{margin-top:90px}.carousel-heading{align-items:flex-start;flex-direction:column}.flex-carousel{height:430px;gap:8px}.flex-card-overlay{padding:55px 12px 16px}}
 @media(max-width:520px){.flex-carousel{height:370px;gap:6px}.flex-card.is-active{flex:3.2 1 0}.flex-card-overlay strong{font-size:16px}.flex-card-overlay small{font-size:7px;letter-spacing:1px}.carousel-hint{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.flex-card{animation:none;opacity:1;transform:none;transition:none}.flex-card img{transition:none}}
+
+
+/* Enhanced 3D liquid-inspired gallery — keeps the existing static-site setup */
+.liquid-filter-defs{position:absolute;width:0;height:0;overflow:hidden}
+.flex-carousel{overflow:visible;touch-action:pan-y;transform-style:preserve-3d}
+.flex-card{--tilt-x:0deg;--tilt-y:0deg;--shine-x:50%;--shine-y:50%;transform-style:preserve-3d;will-change:flex,transform;box-shadow:0 18px 55px rgba(0,0,0,.22)}
+.flex-card::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;background:radial-gradient(circle at var(--shine-x) var(--shine-y),rgba(255,255,255,.23),transparent 34%);mix-blend-mode:screen;transition:opacity .35s}
+.flex-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border:1px solid rgba(255,255,255,.08);background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 28%,transparent 72%,rgba(255,99,59,.10));opacity:.5}
+.flex-card:hover::before,.flex-card.is-active::before{opacity:1}
+.flex-card.is-active{transform:translateY(-2px) rotateY(var(--tilt-x)) rotateX(var(--tilt-y)) scale(1.005);box-shadow:0 28px 75px rgba(0,0,0,.42),0 0 35px rgba(255,99,59,.08)}
+.flex-card.is-active img{transform:scale(1.035);filter:url(#gallery-liquid);transition:transform 1.1s cubic-bezier(.2,.8,.2,1),filter .5s}
+.flex-card-overlay{z-index:3}
+.flex-card.is-dragging{transition:none!important;cursor:grabbing}
+.flex-card{cursor:grab}
+@media(hover:hover) and (pointer:fine){.flex-card:hover{transform:translateY(-3px) rotateY(var(--tilt-x)) rotateX(var(--tilt-y));}}
+@media(max-width:800px){.flex-carousel{overflow:hidden}.flex-card.is-active{transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.flex-card,.flex-card::before,.flex-card img{filter:none!important;transform:none!important;box-shadow:none!important}}
